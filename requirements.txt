@@ -1,0 +1,8 @@
+aiohttp
+aiosocksy
+rsa
+requests[socks]
+configobj
+pyinstaller
+tailer
+python-telegram-bot

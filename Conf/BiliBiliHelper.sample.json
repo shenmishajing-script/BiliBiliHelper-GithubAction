@@ -1,0 +1,48 @@
+{
+  "Function": {
+    "CASEJUDGER": "False",
+    "COIN2SILVER": "False",
+    "GIFTSEND": "True",
+    "GROUP": "True",
+    "SILVER2COIN": "True",
+    "TASK": "True",
+    "MainDailyTask": "True",
+    "MatchTask": "False"
+  },
+  "COIN2SILVER": {
+    "COIN": 1
+  },
+  "GiftSend": {
+    "ROOM_ID": "",
+    "GIFTTiME": -1
+  },
+  "MainDailyTask": {
+    "ROOM_ID": "",
+    "Watch": 1,
+    "Coin": 1,
+    "Share": 1
+  },
+  "MatchTask": {
+    "OpenCapsule": "False",
+    "Message": "_(:3」∠)_"
+  },
+  "Log": {
+    "AUTO_CLEAN": "True",
+    "LOG_LEVEL": "info",
+    "LOG_LIMIT": 1000
+  },
+  "Other": {
+    "CANCEL_COMMAND": "c"
+  },
+  "Proxy": {
+    "PROXY_TYPE": "None",
+    "PROXY_ADDRESS": "socks5://127.0.0.1:1080"
+  },
+  "pcheaders": {
+    "Accept": "application/json, text/plain, */*",
+    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 Safari/537.36",
+    "Accept-Language": "zh-CN,zh;q=0.9",
+    "accept-encoding": "gzip, deflate",
+    "cookie": ""
+  }
+}

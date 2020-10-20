@@ -1,0 +1,13 @@
+{
+  "Account": {
+    "BILIBILI_USER": "your user name",
+    "BILIBILI_PASSWORD": "your passwd"
+  },
+  "Token": {
+    "ACCESS_TOKEN": "",
+    "REFRESH_TOKEN": "",
+    "CSRF": "",
+    "UID": "",
+    "COOKIE": ""
+  }
+}

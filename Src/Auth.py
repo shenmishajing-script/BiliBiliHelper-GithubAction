@@ -1,0 +1,138 @@
+# BiliBiliHelper Python Version
+# Copy right (c) 2019-2020 TheWanderingCoel
+# 该代码实现了登陆验证功能
+# 代码根据metowolf大佬的PHP版本进行改写
+# PHP代码地址:https://github.com/metowolf/BilibiliHelper/blob/0.9x/src/plugins/Auth.php
+
+import base64
+import platform
+import time
+
+if platform.system() == "Windows":
+    from Windows_Log import Log
+else:
+    from Unix_Log import Log
+from Curl import Curl
+from Config import *
+from Base import openssl_public_encrypt, arrange_cookie, set_cookie
+
+
+class Auth:
+    def work(self):
+        if "Token" in account and account["Token"]["ACCESS_TOKEN"] != "":
+            self.loginToken()
+        else:
+            self.loginPassword()
+
+        self.checkCookie()
+
+    def loginPassword(self):
+        Log.info("密码登录")
+        data = self.getPublicKey()
+
+        user = account["Account"]["BILIBILI_USER"]
+        password = account["Account"]["BILIBILI_PASSWORD"]
+        key = data["data"]["key"]
+        hash_ = data["data"]["hash"]
+        crypt = openssl_public_encrypt(hash_ + password, key)
+
+        self.getToken(user, base64.b64encode(crypt))
+
+    def loginToken(self):
+        if self.checkToken() == False:
+            Log.warning("检测到令牌即将过期")
+            Log.info("申请更换令牌")
+            if self.refresh() == False:
+                Log.warning("更换令牌失败")
+                Log.info("使用账号密码方式登陆")
+                self.loginPassword()
+        else:
+            Log.info("令牌未过期")
+
+    def checkCookie(self):
+        url = "https://api.live.bilibili.com/User/getUserInfo"
+        payload = {
+            "ts": int(time.time())
+        }
+        data = Curl().request_json("GET", url, headers = config["pcheaders"], params = payload)
+
+        if data["code"] != "REPONSE_OK":
+            Log.error("检测到 Cookie 过期")
+            Log.info("正在重新登陆")
+            self.loginPassword()
+        else:
+            Log.info("Cookie 未过期")
+
+    def checkToken(self):
+        url = "https://passport.bilibili.com/api/v2/oauth2/info"
+        payload = {
+            "access_token": account["Token"]["ACCESS_TOKEN"]
+        }
+        data = Curl().request_json("GET", url, headers = config["pcheaders"], params = payload)
+
+        if data["code"] == 0:
+            Log.info("令牌验证成功，有效期:" + time.strftime("%Y-%m-%d %H:%M:%S",
+                                                   time.localtime(data["ts"] + data["data"]["expires_in"])))
+        else:
+            Log.error("令牌验证失败")
+            return False
+
+        return data["data"]["expires_in"] > 14400
+
+    def refresh(self):
+        url = "https://passport.bilibili.com/api/oauth2/refreshToken"
+        payload = {
+            "access_token": account["Token"]["ACCESS_TOKEN"],
+            "refresh_token": account["Token"]["REFRESH_TOKEN"],
+        }
+        data = Curl().request_json("POST", url, headers = config["pcheaders"], data = payload)
+
+        if data["code"] == 0:
+            Log.info("续签令牌成功")
+        else:
+            Log.error("续签令牌失败" + "-" + data["message"])
+            return False
+
+        return True
+
+    def getPublicKey(self):
+        url = "https://passport.bilibili.com/api/oauth2/getKey"
+        payload = {}
+        data = Curl().request_json("POST", url, headers = config["pcheaders"], data = payload)
+
+        if data["code"] == 0:
+            Log.info("公钥获取成功")
+        else:
+            Log.error("公钥获取失败" + "-" + data["message"])
+        return data
+
+    def getToken(self, username, password):
+        url = "https://passport.bilibili.com/api/v3/oauth2/login"
+        payload = {
+            "seccode": "",
+            "validate": "",
+            "subid": 1,
+            "permission": "ALL",
+            "username": username,
+            "password": password,
+            "captcha": "",
+            "challenge": "",
+            "cookies": account["Token"]["COOKIE"]
+        }
+
+        data = Curl().request_json("POST", url, headers = config["pcheaders"], data = payload)
+
+        if data["code"] == 0:
+            Log.info("账号登陆成功")
+        else:
+            Log.error("账号登陆失败" + "-" + data["message"])
+        if "Token" not in account:
+            account["Token"] = {}
+        account["Token"]["ACCESS_TOKEN"] = data["data"]["token_info"]["access_token"]
+        account["Token"]["REFRESH_TOKEN"] = data["data"]["token_info"]["refresh_token"]
+
+        csrf, uid, cookie = arrange_cookie(data)
+        account["Token"]["CSRF"] = csrf
+        account["Token"]["UID"] = uid
+
+        set_cookie(cookie)
