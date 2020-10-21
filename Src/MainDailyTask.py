@@ -193,7 +193,7 @@ class MainDailyTask:
                 return
             var = var + 1
             Log.info("本次分享视频为第 %s 次" % (var))
-            Room_Id = random.choice(config["MainDailyTask"]["SHARE_ID"].split(","))
+            Room_Id = random.choice(config["MainDailyTask"]["ROOM_ID"].split(","))
             Log.info("本次分享选择UP的ID为 %s" % (Room_Id))
             url = "https://api.bilibili.com/x/space/arc/search?ps=100&pn=1&mid=" + str(Room_Id)
             data = await AsyncioCurl().request_json("GET", url)
