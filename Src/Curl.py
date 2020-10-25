@@ -1,4 +1,3 @@
-import sys
 import json
 import requests
 import platform
@@ -33,7 +32,7 @@ class Curl:
             i += 1
             if i >= 10:
                 Log.warning(url)
-                sys.exit(1)
+                exit(1)
             try:
                 if method == "GET":
                     if sign == True:
