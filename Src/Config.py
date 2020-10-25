@@ -7,6 +7,12 @@ import json
 
 from configobj import ConfigObj
 
-account = json.loads(os.environ['ACCOUNT'])
-config = json.loads(os.environ['CONFIG'])
+account = os.environ['ACCOUNT']
+config = os.environ['CONFIG']
+
+# account = open(sys.path[0] + "/Conf/Account.json").read()
+# config = open(sys.path[0] + "/Conf/BiliBiliHelper.json").read()
+
+account = json.loads(account)
+config = json.loads(config)
 notification = ConfigObj(sys.path[0] + "/Conf/Notification.conf", encoding = "UTF8")
