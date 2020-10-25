@@ -57,6 +57,7 @@ class AsyncioCurl:
                 i += 1
                 if i >= 10:
                     Log.warning(url)
+                    exit(1)
                 try:
                     async with self.session.request(method, url, headers = headers, data = data, params = params,
                                                     proxy = self.proxies) as rsp:
@@ -71,5 +72,8 @@ class AsyncioCurl:
                             await asyncio.sleep(240)
                         elif rsp.status == 404:
                             return None
+                        else:
+                            Log.warning("url %s return %d code" % (url, rsp.status))
+
                 except:
                     continue

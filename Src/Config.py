@@ -7,11 +7,11 @@ import json
 
 from configobj import ConfigObj
 
-account = os.environ['ACCOUNT']
-config = os.environ['CONFIG']
-
-# account = open(sys.path[0] + "/Conf/Account.json").read()
-# config = open(sys.path[0] + "/Conf/BiliBiliHelper.json").read()
+# account = os.environ['ACCOUNT']
+# config = os.environ['CONFIG']
+#
+account = open(sys.path[0] + "/Conf/Account.json").read()
+config = open(sys.path[0] + "/Conf/BiliBiliHelper.json").read()
 
 account = json.loads(account)
 config = json.loads(config)
