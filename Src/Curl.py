@@ -32,7 +32,7 @@ class Curl:
             i += 1
             if i >= 10:
                 Log.warning(url)
-                exit(1)
+                exit(0)
             try:
                 if method == "GET":
                     if sign == True:

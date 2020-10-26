@@ -57,7 +57,7 @@ class AsyncioCurl:
                 i += 1
                 if i >= 10:
                     Log.warning(url)
-                    exit(1)
+                    exit(0)
                 try:
                     async with self.session.request(method, url, headers = headers, data = data, params = params,
                                                     proxy = self.proxies) as rsp:
