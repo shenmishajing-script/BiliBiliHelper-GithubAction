@@ -6,7 +6,6 @@ sys.path.append(sys.path[0] + "/Src")
 from Auth import Auth
 from Coin2Silver import Coin2Silver
 from GiftSend import GiftSend
-from Group import Group
 from Silver2Coin import Silver2Coin
 from Task import Task
 from Config import *
@@ -19,7 +18,6 @@ Auth = Auth()
 CaseJudger = CaseJudger()
 Coin2Silver = Coin2Silver()
 GiftSend = GiftSend()
-Group = Group()
 Silver2Coin = Silver2Coin()
 Task = Task()
 MainDailyTask = MainDailyTask()
@@ -27,12 +25,10 @@ MatchTask = MatchTask()
 
 
 async def main():
-
     daily_tasks = [
         CaseJudger.work(),
         Coin2Silver.work(),
         GiftSend.work(),
-        Group.work(),
         Silver2Coin.work(),
         Task.work(),
         MainDailyTask.work(),
